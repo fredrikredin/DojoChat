@@ -1,0 +1,32 @@
+Classes:
+
+Channel
+    Guid
+    DateTime Created
+
+Message
+    ChannelGuid
+    Guid
+    Text
+    Username
+    Created
+
+API Functions:
+
+OpenChannel(channelName, passkey)
+    return channelGiud
+
+CloseChannel(channelGuid, passkey)
+
+PushMessage(channelGuid, username, text)
+
+PullMessages(channelGuid)
+    returns messages[]
+
+Links:
+
+https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-2.2&tabs=visual-studio-code
+
+https://www.litedb.org/
+
+https://dev.to/bitsmonkey/launch-net-core-with-vscode-for-starters-2ce5
