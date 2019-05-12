@@ -1,9 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DojoChat.Api.Model;
 using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using DojoChat.Api.Model;
+using DojoChat.Api.DAL;
 
 namespace DojoChat.Api.Controllers
 {
@@ -14,15 +15,10 @@ namespace DojoChat.Api.Controllers
     public class MessagesController : ControllerBase
     {
         //private readonly TodoContext _context;
-        private List<Message> _messages;
 
         public MessagesController()
         {
-            // todo: get seriialized messages.
-            _messages = new List<Message>();
-            _messages.Add(new Message() { Id = 1, User = "User 1", Text = "Text for message 1", Created = DateTime.Now });
-            _messages.Add(new Message() { Id = 2, User = "User 2", Text = "Text for message 2", Created = DateTime.Now });
-            _messages.Add(new Message() { Id = 3, User = "User 1", Text = "Text for message 3", Created = DateTime.Now });
+
         }
 
         // GET: api/Messages
@@ -30,19 +26,43 @@ namespace DojoChat.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Message>>> GetMessages()
         {
-            return await Task.Run(() => _messages);
+            //return await Task.Run(() => Repository.GetMessages());
+            IEnumerable<Message> messages = await Task.Run(() => Repository.GetMessages());
+            return Ok(messages);
         }
 
         // GET: api/Message/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Message>> GetMessage(int id)
         {
-            var message = _messages.FirstOrDefault(o => o.Id == id);
+            Message message = await Task.Run(() => Repository.GetMessage(id));
+            // _messages.FirstOrDefault(o => o.Id == id);
 
             if (message == null)
                 return NotFound();
             else
-                return await Task.Run(() => message);
+                return Ok(message); //await Task.Run(() => message);
+        }
+
+        // POST: api/Todo
+        [HttpPost]
+        public async Task<ActionResult<Message>> PostMessage(Message message)
+        {
+            /* 
+            _context.TodoItems.Add(item);
+            await _context.SaveChangesAsync(); 
+            return CreatedAtAction(nameof(GetTodoItem), new { id = item.Id }, item);
+            */
+
+            await Task.Run(() => Repository.AddMessage(message));
+            return CreatedAtAction(nameof(GetMessage), new { id = message.Id }, message);
+
+            /* 
+            The CreatedAtAction method;
+            - Returns an HTTP 201 status code, if successful; the standard response for an HTTP POST method that creates a new resource.
+            - Adds a Location header to the response.The Location header specifies the URI of the newly created to -do item.
+            - References the GetTodoItem action to create the Location header's URI.
+            */
         }
     }
 }

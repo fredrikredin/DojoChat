@@ -11,6 +11,8 @@ Message
     Username
     Created
 
+
+
 API Functions:
 
 OpenChannel(channelName, passkey)
@@ -23,6 +25,8 @@ PushMessage(channelGuid, username, text)
 PullMessages(channelGuid)
     returns messages[]
 
+
+
 Links:
 
 https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-2.2&tabs=visual-studio-code
@@ -34,8 +38,7 @@ https://www.litedb.org/
 https://dev.to/bitsmonkey/launch-net-core-with-vscode-for-starters-2ce5
 
 
-
-Creating dotnet projects:
+dotnet CLI project commands:
 
 dotnet new webapi -o DojoChat.Api
 dotnet new console -n "DojoChat.Client" -lang c#
