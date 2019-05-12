@@ -1,0 +1,5 @@
+*.sln
+DojoChat.Api/bin/
+DojoChat.Api/obj/
+DojoChat.Client/bin/
+DojoChat.Client/obj/

@@ -30,3 +30,12 @@ https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnet
 https://www.litedb.org/
 
 https://dev.to/bitsmonkey/launch-net-core-with-vscode-for-starters-2ce5
+
+
+
+Creating dotnet projects:
+
+dotnet new webapi -o DojoChat.Api
+dotnet new console -n "DojoChat.Client" -lang c#
+dotnet new sln -n "DojoChat"
+dotnet sln add "DojoChat.Api" "DojoChat.Client"
