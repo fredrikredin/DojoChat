@@ -27,6 +27,8 @@ Links:
 
 https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-2.2&tabs=visual-studio-code
 
+https://docs.microsoft.com/en-us/aspnet/core/web-api/index?view=aspnetcore-2.2
+
 https://www.litedb.org/
 
 https://dev.to/bitsmonkey/launch-net-core-with-vscode-for-starters-2ce5
@@ -39,3 +41,6 @@ dotnet new webapi -o DojoChat.Api
 dotnet new console -n "DojoChat.Client" -lang c#
 dotnet new sln -n "DojoChat"
 dotnet sln add "DojoChat.Api" "DojoChat.Client"
+
+api access point: 
+https://localhost:5001/api/messages
