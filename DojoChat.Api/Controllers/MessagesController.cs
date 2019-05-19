@@ -14,8 +14,6 @@ namespace DojoChat.Api.Controllers
     // controller (and constructor) is instantiated every time there's a new HTTP request.
     public class MessagesController : ControllerBase
     {
-        //private readonly TodoContext _context;
-
         public MessagesController()
         {
 
@@ -31,38 +29,44 @@ namespace DojoChat.Api.Controllers
             return Ok(messages);
         }
 
+        // GET: api/messages/channel/4 
+        [HttpGet]
+        [Route("channel/{channelId}")]
+        public async Task<ActionResult<IEnumerable<Message>>> GetMessages(int channelId)
+        {
+            //return await Task.Run(() => Repository.GetMessages());
+            IEnumerable<Message> channelMessages = await Task.Run(() => Repository.GetChannelMessages(channelId));
+            return Ok(channelMessages);
+        }
+
         // GET: api/Message/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Message>> GetMessage(int id)
         {
             Message message = await Task.Run(() => Repository.GetMessage(id));
-            // _messages.FirstOrDefault(o => o.Id == id);
 
             if (message == null)
                 return NotFound();
             else
-                return Ok(message); //await Task.Run(() => message);
+                return Ok(message);
         }
 
         // POST: api/Todo
         [HttpPost]
         public async Task<ActionResult<Message>> PostMessage(Message message)
         {
-            /* 
-            _context.TodoItems.Add(item);
-            await _context.SaveChangesAsync(); 
-            return CreatedAtAction(nameof(GetTodoItem), new { id = item.Id }, item);
-            */
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
             await Task.Run(() => Repository.AddMessage(message));
             return CreatedAtAction(nameof(GetMessage), new { id = message.Id }, message);
-
-            /* 
-            The CreatedAtAction method;
-            - Returns an HTTP 201 status code, if successful; the standard response for an HTTP POST method that creates a new resource.
-            - Adds a Location header to the response.The Location header specifies the URI of the newly created to -do item.
-            - References the GetTodoItem action to create the Location header's URI.
-            */
         }
     }
 }
+
+/* 
+The CreatedAtAction method;
+- Returns an HTTP 201 status code, if successful; the standard response for an HTTP POST method that creates a new resource.
+- Adds a Location header to the response.The Location header specifies the URI of the newly created to -do item.
+- References the GetTodoItem action to create the Location header's URI.
+*/

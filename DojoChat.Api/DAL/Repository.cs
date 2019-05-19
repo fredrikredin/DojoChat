@@ -23,6 +23,14 @@ namespace DojoChat.Api.DAL
             }
         }
 
+        public static IEnumerable<Message> GetChannelMessages(int channelId)
+        {
+            lock (obj)
+            {
+                return _messages.Where(o => o.ChannelId == channelId);
+            }
+        }
+
         public static Message GetMessage(int id)
         {
             lock (obj)
@@ -35,14 +43,7 @@ namespace DojoChat.Api.DAL
         {
             lock (obj)
             {
-                if (String.IsNullOrWhiteSpace(message.User))
-                    throw new ArgumentNullException("message user must be specified");
-
-                if (String.IsNullOrWhiteSpace(message.Text))
-                    throw new ArgumentNullException("message text must be specified");
-
                 message.Id = _messages.Count + 1;
-                message.Created = DateTime.Now;
                 _messages.Add(message);
                 return message;
             }
