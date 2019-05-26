@@ -14,36 +14,32 @@ namespace DojoChat.Api.Controllers
     // controller (and constructor) is instantiated every time there's a new HTTP request.
     public class MessagesController : ControllerBase
     {
-        public MessagesController()
-        {
+        public MessagesController() { }
 
-        }
-
-        // GET: api/Messages
-        // The [HttpGet] attribute denotes a method that responds to an HTTP GET request
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Message>>> GetMessages()
-        {
-            //return await Task.Run(() => Repository.GetMessages());
-            IEnumerable<Message> messages = await Task.Run(() => Repository.GetMessages());
-            return Ok(messages);
-        }
+        // GET: api/messages
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<Message>>> GetMessages()
+        //{
+        //    return Ok(await Repository.GetMessagesAsync());
+        //}
 
         // GET: api/messages/channel/4 
+        // The [HttpGet] attribute denotes a method that responds to an HTTP GET request
         [HttpGet]
-        [Route("channel/{channelId}")]
+        [Route("channels/{channelId}")]
         public async Task<ActionResult<IEnumerable<Message>>> GetMessages(int channelId)
         {
-            //return await Task.Run(() => Repository.GetMessages());
-            IEnumerable<Message> channelMessages = await Task.Run(() => Repository.GetChannelMessages(channelId));
-            return Ok(channelMessages);
+            if (channelId < 1 || channelId > 65536)
+                return BadRequest("The field ChannelId must be between 1 and 65536.");
+
+            return Ok(await Repository.GetMessagesForChannelAsync(channelId));
         }
 
         // GET: api/Message/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Message>> GetMessage(int id)
         {
-            Message message = await Task.Run(() => Repository.GetMessage(id));
+            Message message = await Repository.GetMessageAsync(id);
 
             if (message == null)
                 return NotFound();
@@ -51,15 +47,36 @@ namespace DojoChat.Api.Controllers
                 return Ok(message);
         }
 
-        // POST: api/Todo
-        [HttpPost]
-        public async Task<ActionResult<Message>> PostMessage(Message message)
+        [HttpGet]
+        [Route("channels")]
+        public async Task<ActionResult<IEnumerable<int>>> GetChannels()
         {
+            return Ok(await Repository.GetChannelIds());
+        }
+
+        // POST: api/messages/channel/4
+        [HttpPost]
+        [Route("channels/{channelId}")]
+        public async Task<ActionResult<Message>> PostMessage(int channelId, Message message)
+        {
+            message.ChannelId = channelId;
+
+            TryValidateModel(message);
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            await Task.Run(() => Repository.AddMessage(message));
+            await Repository.AddMessageAsync(message);
             return CreatedAtAction(nameof(GetMessage), new { id = message.Id }, message);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteMessage(int id)
+        {
+            if (await Repository.DeleteMessageAsync(id))
+                return Ok();
+            else
+                return NotFound();
         }
     }
 }

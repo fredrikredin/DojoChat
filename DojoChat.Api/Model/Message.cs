@@ -6,6 +6,7 @@ namespace DojoChat.Api.Model
     public class Message
     {
         public int Id { get; set; }
+
         public DateTime Created { get; private set; } = DateTime.Now;
 
         [Required]
@@ -15,9 +16,8 @@ namespace DojoChat.Api.Model
         [StringLength(256)]
         public string Text { get; set; }
 
-        // ??? maybe later create a post OpenChannel(string username, string passcode) returning a channel guid 
         [Required]
-        [Range(1, int.MaxValue)]
-        public int ChannelId { get; set; }
+        [Range(1, 65536)]
+        public int ChannelId { get; set; } = 1;
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using DojoChat.Api.Model;
 
 namespace DojoChat.Api.DAL
@@ -15,38 +16,61 @@ namespace DojoChat.Api.DAL
             _messages = new List<Message>();
         }
 
-        public static IEnumerable<Message> GetMessages()
+        public static Task<IEnumerable<Message>> GetMessagesForChannelAsync(int channelId)
         {
-            lock (obj)
+            return Task.Run(() => 
             {
-                return _messages;
-            }
+                lock (obj)
+                {
+                    return _messages.Where(o => o.ChannelId == channelId);
+                }
+            });
         }
 
-        public static IEnumerable<Message> GetChannelMessages(int channelId)
+        public static Task<Message> GetMessageAsync(int id)
         {
-            lock (obj)
+            return Task.Run(() =>
             {
-                return _messages.Where(o => o.ChannelId == channelId);
-            }
+                lock (obj)
+                {
+                    return _messages.FirstOrDefault(o => o.Id == id);
+                }
+            });
         }
 
-        public static Message GetMessage(int id)
+        public static Task<IEnumerable<int>> GetChannelIds()
         {
-            lock (obj)
+            return Task.Run(() => 
             {
-                return _messages.FirstOrDefault(o => o.Id == id);
-            }
+                lock(obj)
+                {
+                    return _messages.Select(o => o.ChannelId).OrderBy(o => o).Distinct();
+                }
+            });
         }
 
-        public static Message AddMessage(Message message)
+        public static Task<Message> AddMessageAsync(Message message)
         {
-            lock (obj)
+            return Task.Run(() =>
             {
-                message.Id = _messages.Count + 1;
-                _messages.Add(message);
-                return message;
-            }
+                lock (obj)
+                {
+                    message.Id = _messages.Count + 1;
+                    _messages.Add(message);
+                    return message;
+                }
+            });
+        }
+
+        public static Task<bool> DeleteMessageAsync(int id)
+        {
+            return Task.Run(() =>
+            {
+                lock (obj)
+                {
+                    return _messages.Remove(_messages.FirstOrDefault(o => o.Id == id));
+                }
+            });
         }
     }
 }
