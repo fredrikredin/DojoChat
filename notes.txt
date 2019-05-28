@@ -54,4 +54,8 @@ cd DojoChat.Api
 dotnet run
 
 api access point: 
+
+http://localhost:5000/swagger/index.html
+http://localhost:5000/swagger/v1/swagger.json
 https://localhost:5001/api/messages
+
