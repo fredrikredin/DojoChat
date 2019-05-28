@@ -45,5 +45,13 @@ dotnet new console -n "DojoChat.Client" -lang c#
 dotnet new sln -n "DojoChat"
 dotnet sln add "DojoChat.Api" "DojoChat.Client"
 
+// add some code 
+
+dotnet restore DojoChat.sln
+dotnet build DojoChat.sln
+
+cd DojoChat.Api
+dotnet run
+
 api access point: 
 https://localhost:5001/api/messages
