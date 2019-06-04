@@ -62,13 +62,13 @@ namespace DojoChat.Api.DAL
             });
         }
 
-        public static Task<bool> DeleteMessageAsync(int id)
+        public static Task<bool> DeleteMessageAsync(int channelId, int messageId)
         {
             return Task.Run(() =>
             {
                 lock (obj)
                 {
-                    return _messages.Remove(_messages.FirstOrDefault(o => o.Id == id));
+                    return _messages.Remove(_messages.FirstOrDefault(o => o.ChannelId == channelId && o.Id == messageId));
                 }
             });
         }
