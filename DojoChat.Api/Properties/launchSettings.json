@@ -16,7 +16,9 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "api/messages",
+      //"launchUrl": "api/messages",
+      //"launchUrl": "api/messages/channel/1",
+      "launchUrl": "http://localhost:5000/index.html",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -24,7 +26,9 @@
     "DojoChat.Api": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/messages",
+      //"launchUrl": "api/messages",
+      //"launchUrl": "api/messages/channel/1",
+      "launchUrl": "http://localhost:5000/index.html",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

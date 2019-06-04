@@ -72,7 +72,7 @@ namespace DojoChat.Api
             app.UseSwaggerUI(c =>
             {
                c.SwaggerEndpoint("/swagger/v1/swagger.json", "DojoChat API V1");
-               c.RoutePrefix = string.Empty;
+               c.RoutePrefix = string.Empty; // default prefix is "swagger" --> http://localhost:5000/swagger/index.html 
             });
 
            

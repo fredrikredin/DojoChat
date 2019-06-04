@@ -17,17 +17,17 @@ namespace DojoChat.Api.Controllers
         public MessagesController() { }
 
         // GET: api/messages
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Message>>> GetMessages()
-        {
-            //return Ok(await Repository.GetMessagesAsync());
-            return Ok(await Repository.GetMessagesForChannelAsync(1));
-        }
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<Message>>> GetMessages()
+        //{
+        //    //return Ok(await Repository.GetMessagesAsync());
+        //    return Ok(await Repository.GetMessagesForChannelAsync(1));
+        //}
 
         // GET: api/messages/channel/4 
         // The [HttpGet] attribute denotes a method that responds to an HTTP GET request
         [HttpGet]
-        [Route("channels/{channelId}")]
+        [Route("channel/{channelId}")]
         public async Task<ActionResult<IEnumerable<Message>>> GetMessages(int channelId)
         {
             if (channelId < 1 || channelId > 65536)
@@ -57,7 +57,7 @@ namespace DojoChat.Api.Controllers
 
         // POST: api/messages/channel/4
         [HttpPost]
-        [Route("channels/{channelId}")]
+        [Route("channel/{channelId}")]
         public async Task<ActionResult<Message>> PostMessage(int channelId, Message message)
         {
             message.ChannelId = channelId;

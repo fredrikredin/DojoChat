@@ -1,51 +1,16 @@
-Classes:
-
-Channel
-    Guid
-    DateTime Created
-
-Message
-    ChannelGuid
-    Guid
-    Text
-    Username
-    Created
-
-
-
-API Functions:
-
-OpenChannel(channelName, passkey)
-    return channelGiud
-
-CloseChannel(channelGuid, passkey)
-
-PushMessage(channelGuid, username, text)
-
-PullMessages(channelGuid)
-    returns messages[]
-
-
-
 Links:
-
 https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api?view=aspnetcore-2.2&tabs=visual-studio-code
-
 https://docs.microsoft.com/en-us/aspnet/core/web-api/index?view=aspnetcore-2.2
-
 https://www.litedb.org/
-
 https://dev.to/bitsmonkey/launch-net-core-with-vscode-for-starters-2ce5
 
-
-dotnet CLI project commands:
-
+.NET Core CLI commands:
 dotnet new webapi -o DojoChat.Api
 dotnet new console -n "DojoChat.Client" -lang c#
 dotnet new sln -n "DojoChat"
 dotnet sln add "DojoChat.Api" "DojoChat.Client"
 
-// add some code 
+// add some code ...
 
 dotnet restore DojoChat.sln
 dotnet build DojoChat.sln
@@ -53,17 +18,16 @@ dotnet build DojoChat.sln
 cd DojoChat.Api
 dotnet run
 
-api access point: 
+API access point: 
+http://localhost:5000/index.html (Swagger front end)
 
-http://localhost:5000/swagger/index.html
-http://localhost:5000/swagger/v1/swagger.json
-https://localhost:5001/api/messages
-
-
-Example POST requests:
-URL:    http://localhost:5000/api/messages/channels/4
+Example POST request:
+URL:    http://localhost:5000/api/messages/channel/4
 BODY - JSON (application/json):
 {
 	"User": "Fredrik",
 	"Text": "Hello world from Fredrik"
 }
+
+Example GET request:
+URL:    http://localhost:5000/api/messages/channel/1
