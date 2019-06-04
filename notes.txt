@@ -59,3 +59,11 @@ http://localhost:5000/swagger/index.html
 http://localhost:5000/swagger/v1/swagger.json
 https://localhost:5001/api/messages
 
+
+Example POST requests:
+URL:    http://localhost:5000/api/messages/channels/4
+BODY - JSON (application/json):
+{
+	"User": "Fredrik",
+	"Text": "Hello world from Fredrik"
+}

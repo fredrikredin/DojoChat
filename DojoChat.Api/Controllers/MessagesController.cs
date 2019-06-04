@@ -17,11 +17,12 @@ namespace DojoChat.Api.Controllers
         public MessagesController() { }
 
         // GET: api/messages
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Message>>> GetMessages()
-        //{
-        //    return Ok(await Repository.GetMessagesAsync());
-        //}
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Message>>> GetMessages()
+        {
+            //return Ok(await Repository.GetMessagesAsync());
+            return Ok(await Repository.GetMessagesForChannelAsync(1));
+        }
 
         // GET: api/messages/channel/4 
         // The [HttpGet] attribute denotes a method that responds to an HTTP GET request
