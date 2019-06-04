@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using DojoChat.Api.Model;
-using DojoChat.Api.DAL;
+using DojoChat.Api.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace DojoChat.Api.Controllers
 {
@@ -14,7 +16,14 @@ namespace DojoChat.Api.Controllers
     // controller (and constructor) is instantiated every time there's a new HTTP request.
     public class MessagesController : ControllerBase
     {
-        public MessagesController() { }
+        private readonly MessagesContext _context;
+
+        //public MessagesController() { }
+
+        public MessagesController(MessagesContext context)
+        {
+            _context = context;
+        }
 
         // GET: api/messages/channel/4 
         [HttpGet]
@@ -24,14 +33,18 @@ namespace DojoChat.Api.Controllers
             if (channelId < 1 || channelId > 65536)
                 return BadRequest("The field ChannelId must be between 1 and 65536.");
 
-            return Ok(await Repository.GetMessagesForChannelAsync(channelId));
+            //IEnumerable<Message> messages = await MessageList.GetMessagesForChannelAsync(channelId);
+            var messages = await _context.Messages.Where(m => m.ChannelId == channelId).ToListAsync();
+
+            return base.Ok(messages);
         }
 
         //GET: api/Message/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Message>> GetMessage(int id)
         {
-            Message message = await Repository.GetMessageAsync(id);
+            //Message message = await MessageList.GetMessageAsync(id);
+            Message message = await _context.Messages.FirstOrDefaultAsync(o => o.Id == id);
 
             if (message == null)
                 return NotFound();
@@ -43,7 +56,13 @@ namespace DojoChat.Api.Controllers
         [Route("channels")]
         public async Task<ActionResult<IEnumerable<int>>> GetChannels()
         {
-            return Ok(await Repository.GetChannelIds());
+            //return base.Ok(await MessageList.GetChannelIds());
+            IEnumerable<int> channels = await _context.Messages.Select(m => m.ChannelId)
+                                                               .OrderBy(o => o)
+                                                               .Distinct()
+                                                               .ToListAsync();
+
+            return Ok(channels);
         }
 
         // POST: api/messages/channel/4
@@ -56,7 +75,10 @@ namespace DojoChat.Api.Controllers
             if (!TryValidateModel(message))
                 return BadRequest(ModelState);
 
-            await Repository.AddMessageAsync(message);
+            //await MessageList.AddMessageAsync(message);
+            _context.Messages.Add(message);
+            await _context.SaveChangesAsync();
+
             return CreatedAtAction(nameof(GetMessage), new { id = message.Id }, message);
         }
 
@@ -65,10 +87,16 @@ namespace DojoChat.Api.Controllers
         [Route("{messageId}/channel/{channelId}")]
         public async Task<ActionResult> DeleteMessage(int messageId, int channelId)
         {
-            if (await Repository.DeleteMessageAsync(channelId, messageId))
-                return Ok();
-            else
+            //bool success = await MessageList.DeleteMessageAsync(channelId, messageId)
+            Message msg = await _context.Messages.FirstOrDefaultAsync(m => m.Id == messageId && m.ChannelId == channelId);
+
+            if (msg == null)
                 return NotFound();
+
+            _context.Messages.Remove(msg);
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }

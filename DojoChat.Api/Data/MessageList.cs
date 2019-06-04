@@ -4,14 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using DojoChat.Api.Model;
 
-namespace DojoChat.Api.DAL
+namespace DojoChat.Api.Data
 {
-    public static class Repository
+    public static class MessageList
     {
         private static readonly Object obj = new Object();
         private static List<Message> _messages;
 
-        static Repository()
+        static MessageList()
         {
             _messages = new List<Message>();
         }

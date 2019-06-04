@@ -4,6 +4,7 @@ https://docs.microsoft.com/en-us/aspnet/core/web-api/index?view=aspnetcore-2.2
 https://www.litedb.org/
 https://dev.to/bitsmonkey/launch-net-core-with-vscode-for-starters-2ce5
 https://www.hanselman.com/blog/DevelopingLocallyWithASPNETCoreUnderHTTPSSSLAndSelfSignedCerts.aspx
+https://stormpath.com/blog/tutorial-entity-framework-core-in-memory-database-asp-net-core
 
 .NET Core CLI commands:
 dotnet new webapi -o DojoChat.Api
